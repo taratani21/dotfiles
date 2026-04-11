@@ -1,4 +1,10 @@
 vim.g.mapleader = ","
+
+-- Polyfill removed vim.treesitter.language.ft_to_lang (nvim 0.12)
+if not vim.treesitter.language.ft_to_lang then
+  vim.treesitter.language.ft_to_lang = vim.treesitter.language.get_lang
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -121,4 +127,4 @@ require('remap')
 -- custom functions to be added to
 local functions = require('functions')
 vim.keymap.set({ 'n', 'i' }, '<leader>r', functions.reload)
-vim.lsp.set_log_level("DEBUG")
+vim.lsp.set_log_level("WARN")
