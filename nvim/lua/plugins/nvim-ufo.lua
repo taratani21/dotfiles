@@ -14,7 +14,7 @@ return {
       })
 
       -- Fold settings
-      vim.o.foldcolumn = "1" -- Show fold column
+      vim.o.foldcolumn = "0" -- Hide fold column (numbers showed depth, not line numbers)
       vim.o.foldlevel = 99   -- Start unfolded
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true -- Enable folding

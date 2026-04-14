@@ -93,8 +93,18 @@ vim.opt.incsearch = true
 vim.opt.scrolloff = 8
 
 -- Make line numbers default
-vim.wo.number = true
+vim.o.number = true
 vim.o.relativenumber = true
+
+-- Ensure line numbers are set on every new buffer/window
+vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+  callback = function()
+    if vim.bo.buftype == "" then
+      vim.wo.number = true
+      vim.wo.relativenumber = true
+    end
+  end,
+})
 
 -- Disable mouse mode
 vim.o.mouse = ''
