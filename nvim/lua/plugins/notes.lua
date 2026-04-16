@@ -4,8 +4,8 @@
 local notes_dir = vim.fn.expand("~/.notes")
 
 local function get_project()
-  local toplevel = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
-  if vim.v.shell_error == 0 and toplevel and toplevel ~= "" then
+  local toplevel = vim.trim(vim.fn.systemlist("git rev-parse --show-toplevel")[1] or "")
+  if vim.v.shell_error == 0 and toplevel ~= "" then
     return vim.fn.fnamemodify(toplevel, ":t")
   end
   return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
@@ -26,15 +26,20 @@ local function quick_note()
     vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
     local time = os.date("%H:%M")
     local line = "- " .. time .. " — " .. input .. "\n"
-    local f = io.open(path, "a")
+    local f, err = io.open(path, "a")
+    if not f then
+      vim.notify("Failed to save note: " .. err, vim.log.levels.ERROR)
+      return
+    end
     f:write(line)
     f:close()
-    print("Note saved")
+    vim.notify("Note saved")
   end)
 end
 
 local function open_daily()
   local path = get_daily_path()
+  vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
   vim.cmd("botright split " .. vim.fn.fnameescape(path))
 end
 
