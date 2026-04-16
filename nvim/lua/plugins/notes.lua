@@ -22,18 +22,20 @@ local function quick_note()
     if not input or input == "" then
       return
     end
-    local path = get_daily_path()
-    vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
-    local time = os.date("%H:%M")
-    local line = "- " .. time .. " — " .. input .. "\n"
-    local f, err = io.open(path, "a")
-    if not f then
-      vim.notify("Failed to save note: " .. err, vim.log.levels.ERROR)
-      return
-    end
-    f:write(line)
-    f:close()
-    vim.notify("Note saved")
+    vim.schedule(function()
+      local path = get_daily_path()
+      vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
+      local time = os.date("%H:%M")
+      local line = "- " .. time .. " — " .. input .. "\n"
+      local f, err = io.open(path, "a")
+      if not f then
+        vim.notify("Failed to save note: " .. err, vim.log.levels.ERROR)
+        return
+      end
+      f:write(line)
+      f:close()
+      vim.notify("Note saved")
+    end)
   end)
 end
 
