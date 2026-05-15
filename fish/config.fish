@@ -18,14 +18,14 @@ bind -M default \cd delete-char # For vi normal mode
 
 alias icat="kitten icat"
 
-set -x GOPATH /Users/taran/go
-set -x GOBIN /Users/taran/go/bin
+set -x GOPATH $HOME/go
+set -x GOBIN $HOME/go/bin
 
 set -x EDITOR nvim
 set -x DOCKERPATH $HOME/.docker/bin
 
 set -x PAGER less -R
 
-set -gx PATH /opt/homebrew/bin $PATH /Users/taran/.local/bin ~/Library/Android/sdk/platform-tools $PWD/node_modules/.bin
+set -gx PATH /opt/homebrew/bin $GOBIN $PATH ~/.local/bin ~/Library/Android/sdk/platform-tools $PWD/node_modules/.bin
 
 alias unlock-keychain="security unlock-keychain ~/Library/Keychains/login.keychain-db"
