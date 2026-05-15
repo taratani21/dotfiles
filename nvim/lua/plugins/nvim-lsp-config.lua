@@ -25,6 +25,18 @@ return {
                 map("<leader>ca", vim.lsp.buf.code_action, "Code action")
                 map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
                 map("gs", vim.lsp.buf.signature_help, "Signature help")
+                map("<leader>lr", function()
+                    local clients = vim.lsp.get_clients({ bufnr = 0 })
+                    local names = {}
+                    for _, c in ipairs(clients) do
+                        table.insert(names, c.name)
+                        vim.lsp.stop_client(c.id, true)
+                    end
+                    vim.defer_fn(function()
+                        vim.cmd("edit")
+                        vim.notify("Restarted LSP: " .. table.concat(names, ", "))
+                    end, 200)
+                end, "Restart LSP (refresh diagnostics)")
 
                 -- Show diagnostics on CursorHold
                 vim.api.nvim_create_autocmd("CursorHold", {
@@ -112,6 +124,8 @@ return {
                 documentation = cmp.config.window.bordered(),
             },
             mapping = cmp.mapping.preset.insert({
+                ['<C-j>'] = cmp.mapping.select_next_item(),
+                ['<C-k>'] = cmp.mapping.select_prev_item(),
                 ['<C-y>'] = cmp.mapping.complete(),
                 ['<C-u>'] = cmp.mapping.scroll_docs(-4),
                 ['<C-d>'] = cmp.mapping.scroll_docs(4),
