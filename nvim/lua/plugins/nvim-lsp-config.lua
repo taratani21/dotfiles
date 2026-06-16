@@ -6,6 +6,7 @@ return {
     dependencies = {
         { 'hrsh7th/cmp-nvim-lsp' },
         { 'williamboman/mason-lspconfig.nvim' },
+        { 'b0o/SchemaStore.nvim' },
     },
     config = function()
         local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -57,7 +58,7 @@ return {
 
         -- Mason auto-installs servers
         require('mason-lspconfig').setup({
-            ensure_installed = {},
+            ensure_installed = { 'yamlls' },
             handlers = {
                 -- Default handler for all servers
                 function(server_name)
@@ -81,6 +82,26 @@ return {
                         },
                     })
                     vim.lsp.enable('lua_ls')
+                end,
+                yamlls = function()
+                    vim.lsp.config('yamlls', {
+                        capabilities = capabilities,
+                        settings = {
+                            yaml = {
+                                schemaStore = {
+                                    -- Disable built-in store so SchemaStore.nvim wins
+                                    enable = false,
+                                    url = '',
+                                },
+                                schemas = require('schemastore').yaml.schemas(),
+                                validate = { enable = true },
+                                format = { enable = true },
+                                hover = true,
+                                completion = true,
+                            },
+                        },
+                    })
+                    vim.lsp.enable('yamlls')
                 end,
             }
         })

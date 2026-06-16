@@ -5,6 +5,17 @@ return {
         { "<leader>do", "<cmd>DiffviewOpen<cr>", desc = "Diffview Open" },
         { "<leader>dc", "<cmd>DiffviewClose<cr>", desc = "Diffview Close" },
         {
+            "<leader>dm",
+            function()
+                local ref = vim.fn.systemlist("git symbolic-ref --quiet --short refs/remotes/origin/HEAD")[1]
+                if vim.v.shell_error ~= 0 or not ref or ref == "" then
+                    ref = "origin/main"
+                end
+                vim.cmd("DiffviewOpen " .. ref .. "...HEAD")
+            end,
+            desc = "Diff origin/{base}...HEAD",
+        },
+        {
             "<leader>dl",
             function()
                 local actions = require("telescope.actions")
